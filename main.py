@@ -1,5 +1,5 @@
 # Program to control passerelle between Android application
-# and micro-controller through USB tty
+# and micro-controller through USB tty za
 import datetime
 
 import constantes as cst
