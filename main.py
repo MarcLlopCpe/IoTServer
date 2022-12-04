@@ -44,9 +44,12 @@ class Main:
         super().__init__()
 
     def __message_treatment(self, message):
-
+        """
+        Methode de traitement des messages en provenance de la liaison série
+        :param message:
+        :return:
+        """
         # message = self.serial.read(cst.SENSOR_DATA_LENGTH)
-
         header: str = message[1:3].decode()
         data: bytes = message[3:-2]
 
@@ -94,6 +97,7 @@ class Main:
             while self.serial.isOpen():
                 if self.serial.inWaiting() >= cst.SENSOR_DATA_LENGTH:  # if incoming bytes are waiting
                     message = self.serial.read_until(b'\n')
+                    print("m", message)
 
                     if len(message) == cst.SENSOR_DATA_LENGTH:
                         try:
@@ -112,7 +116,6 @@ class Main:
             self.close()
 
 
-# Main program logic follows:
 if __name__ == '__main__':
     print("__Début__")
     Main().start()

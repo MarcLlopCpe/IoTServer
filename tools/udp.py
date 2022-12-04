@@ -10,14 +10,12 @@ from main import LastValue
 class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
     currentThread: threading.Thread
 
-    _RESPONSE_PORT = 10001
-
     def __init__(self, request, client_address, server):
         super().__init__(request, client_address, server)
         self.current_thread = None
 
     def print(self, *messages: str, sep=", ", end="\n"):
-        print(self.current_thread.name + ", ", sep.join(messages), end=end)
+        print(self.current_thread.name + ", ", sep.join(messages), end="\n")
 
     def send_serial(self, data):
         message = b"-" + data + b"\r\n"
@@ -27,8 +25,8 @@ class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
     def send_udp_last_value(self, socket):
         data: LastValue = self.server.serial[1]
         # TODO REGLER PROBLEME DE PORT
-        print(str(data).encode(),self.client_address[0], self._RESPONSE_PORT)
-        socket.sendto(str(data).encode(), (self.client_address[0], self._RESPONSE_PORT))
+        print(str(data).encode(), *self.client_address)
+        socket.sendto(str(data).encode(), self.client_address)
         self.print("UDP send: " + str(data))
 
     def handle(self):
