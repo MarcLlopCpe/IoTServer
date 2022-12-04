@@ -27,3 +27,14 @@ HOST = ""
 UDP_PORT = 10000
 MICRO_COMMANDS = [B"TL", B"LT"]
 FILENAME = "values.txt"
+
+# === INFLUXDB === #
+
+ORG = "CPE"
+URL = "http://localhost:8086"
+BUCKET="IOT"
+
+Mesures = {
+    'T':"temperature",
+    'L':"lumiere"
+}

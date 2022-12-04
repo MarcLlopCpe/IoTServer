@@ -5,7 +5,7 @@ import datetime
 import constantes as cst
 import tools.serial as tl_ser
 import tools.udp as tl_udp
-
+import tools.influxdb as tl_idb
 
 def print_sep(sep: str = "==================", end="\n"):
     print(sep, end=end)
@@ -40,6 +40,8 @@ class Main:
         self.serial = tl_ser.init()
 
         self.server, self.server_thread = tl_udp.init(self.serial, self.last_value)
+
+        self.influxdb = tl_idb.connexion_client()
 
         super().__init__()
 
@@ -103,6 +105,8 @@ class Main:
                         try:
                             order, new_value = self.__message_treatment(message)
                             self.last_value.set(new_value, order=order)
+                            for i, key in enumerate(order):
+                                tl_idb.send_measurement(self.influxdb, measurement=cst.Mesures[key],tags={"localisation":"salon","numero_capteur":0},fields={"valeur":new_value[i]},time=datetime.now())
                         except MessageTreatmentException as e:
                             print(e.with_traceback)
                     else:
